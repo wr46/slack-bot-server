@@ -10,6 +10,8 @@ import (
 	"github.com/nlopes/slack"
 )
 
+const PRIVATE_CHANNEL_PREFIX = 'D'
+
 func HandleMessage(event *slack.MessageEvent, api *slack.Client) {
 	if isToRejectMessage(event) {
 		return
@@ -25,7 +27,6 @@ func HandleMessage(event *slack.MessageEvent, api *slack.Client) {
 func isABotMessage(event *slack.MessageEvent) bool {
 	if len(event.BotID) > 0 {
 		logger.Log(logger.Debug, fmt.Sprintf("BotId = '%s'", event.BotID))
-		logger.Log(logger.Debug, fmt.Sprintf("BotChannelId = '%s'", event.Channel))
 		return true
 	}
 	return false
@@ -36,11 +37,22 @@ func isABotMessage(event *slack.MessageEvent) bool {
  */
 func isMessageToBot(event *slack.MessageEvent) bool {
 	// Message sent into Bot chat window or with Bot tagged
-	if configuration.ENV.BotChannelId == event.Channel ||
+	if isPrivateChat(event.Channel) ||
 		strings.Contains(event.Text, "<@"+configuration.ENV.BotId+">") {
 		return true
 	}
 
+	return false
+}
+
+/**
+ * Evaluate if channel is private or public
+ * Private chat in Slack has a prefix letter
+ */
+func isPrivateChat(channelId string) bool {
+	if channelId != "" && channelId[0] == PRIVATE_CHANNEL_PREFIX {
+		return true
+	}
 	return false
 }
 

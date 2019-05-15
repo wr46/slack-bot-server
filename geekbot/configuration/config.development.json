@@ -1,6 +1,5 @@
 {
     "SlackToken" : "YOUR SLACK TOKEN HERE",
     "BotId" : "YOUR SLACK BOT ID HERE",
-    "BotChannelId" : "YOUR SLACK BOT CHANNEL ID HERE",
     "Debug" : false
 }

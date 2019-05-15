@@ -23,14 +23,12 @@ In order for the server to work, you need to configure the config.json file. (./
 {
     "SlackToken" : "YOUR SLACK TOKEN HERE",
     "BotId" : "YOUR SLACK BOT ID HERE",
-    "BotChannelId" : "YOUR SLACK BOT CHANNEL ID HERE",
     "Debug" : false
 }
 ```
 
 - **SlackToken** can be found after bot integration in your Slack workspace
 - **BotId** can be found simply by execute this server in debug mode and chat directly with the bot
-- **BotChannelId** same way as **BotId**
 
 ## License
 
