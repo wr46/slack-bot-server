@@ -1,11 +1,11 @@
 package configuration
 
 import (
-	"geekbot/logger"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
+	"slack-bot-server/logger"
 	"strings"
 
 	"github.com/tkanos/gonfig"

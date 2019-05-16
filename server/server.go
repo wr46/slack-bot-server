@@ -1,11 +1,11 @@
 package server
 
 import (
-	"geekbot/configuration"
-	"geekbot/event"
-	"geekbot/logger"
 	"log"
 	"os"
+	"slack-bot-server/configuration"
+	"slack-bot-server/event"
+	"slack-bot-server/logger"
 
 	"github.com/nlopes/slack"
 )

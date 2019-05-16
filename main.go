@@ -1,8 +1,8 @@
 package main
 
 import (
-	"geekbot/configuration"
-	"geekbot/server"
+	"slack-bot-server/configuration"
+	"slack-bot-server/server"
 )
 
 func main() {

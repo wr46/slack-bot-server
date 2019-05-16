@@ -2,7 +2,8 @@ package event
 
 import (
 	"fmt"
-	"geekbot/logger"
+
+	"slack-bot-server/logger"
 
 	"github.com/nlopes/slack"
 )
