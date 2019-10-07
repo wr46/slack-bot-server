@@ -3,14 +3,11 @@ package event
 import (
 	"fmt"
 
-	"slack-bot-server/logger"
-
 	"github.com/nlopes/slack"
+	"github.com/wr46/slack-bot-server/logger"
 )
 
-/**
- * This is the event handle and is responsible for event redirection
- */
+// HandleEvent the event handle and is responsible for event redirection
 func HandleEvent(data interface{}, api *slack.Client) {
 	logger.Log(logger.Debug, "Event will be handled!")
 	switch ev := data.(type) {

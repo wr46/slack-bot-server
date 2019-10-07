@@ -5,21 +5,24 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
-	"slack-bot-server/logger"
 	"strings"
 
 	"github.com/tkanos/gonfig"
+	"github.com/wr46/slack-bot-server/logger"
 )
 
+// Configuration container
 type Configuration struct {
 	SlackToken   string
-	BotId        string
-	BotChannelId string
+	BotID        string
+	BotChannelID string
 	Debug        bool
 }
 
+// ENV environment data
 var ENV Configuration
 
+// Setup configuration
 func Setup() {
 
 	// Initialize logger

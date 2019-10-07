@@ -2,16 +2,17 @@ package event
 
 import (
 	"fmt"
-	"slack-bot-server/bot"
-	"slack-bot-server/configuration"
-	"slack-bot-server/logger"
 	"strings"
 
 	"github.com/nlopes/slack"
+	"github.com/wr46/slack-bot-server/bot"
+	"github.com/wr46/slack-bot-server/configuration"
+	"github.com/wr46/slack-bot-server/logger"
 )
 
-const PRIVATE_CHANNEL_PREFIX = 'D'
+const privateChanelPrefix = 'D'
 
+// HandleMessage message processing
 func HandleMessage(event *slack.MessageEvent, api *slack.Client) {
 	if isToRejectMessage(event) {
 		return
@@ -38,7 +39,7 @@ func isABotMessage(event *slack.MessageEvent) bool {
 func isMessageToBot(event *slack.MessageEvent) bool {
 	// Message sent into Bot chat window or with Bot tagged
 	if isPrivateChat(event.Channel) ||
-		strings.Contains(event.Text, "<@"+configuration.ENV.BotId+">") {
+		strings.Contains(event.Text, "<@"+configuration.ENV.BotID+">") {
 		return true
 	}
 
@@ -49,16 +50,14 @@ func isMessageToBot(event *slack.MessageEvent) bool {
  * Evaluate if channel is private or public
  * Private chat in Slack has a prefix letter
  */
-func isPrivateChat(channelId string) bool {
-	if channelId != "" && channelId[0] == PRIVATE_CHANNEL_PREFIX {
+func isPrivateChat(channelID string) bool {
+	if channelID != "" && channelID[0] == privateChanelPrefix {
 		return true
 	}
 	return false
 }
 
-/**
- * Evaluate if message is to be handled
- */
+// Evaluate if message is to be handled
 func isToRejectMessage(event *slack.MessageEvent) bool {
 	// Only user messages are handled
 	if isABotMessage(event) || !isMessageToBot(event) {
@@ -67,12 +66,10 @@ func isToRejectMessage(event *slack.MessageEvent) bool {
 	return false
 }
 
-/**
- * Send a message to the given user
- */
-func sendMessage(api *slack.Client, recipientId string, message string) {
+// Send a message to the given user
+func sendMessage(api *slack.Client, recipientID string, message string) {
 	channelID, timestamp, err := api.PostMessage(
-		recipientId,
+		recipientID,
 		slack.MsgOptionText(message, false),
 		slack.MsgOptionAsUser(true),
 	)

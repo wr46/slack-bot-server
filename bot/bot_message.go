@@ -4,9 +4,7 @@ import (
 	"github.com/nlopes/slack"
 )
 
-/**
- * Bot will answer to given message
- */
+// AnswerMessage bot will answer to given message
 func AnswerMessage(event *slack.MessageEvent, api *slack.Client) string {
 
 	// Do something
