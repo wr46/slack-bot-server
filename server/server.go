@@ -3,11 +3,11 @@ package server
 import (
 	"log"
 	"os"
-	"slack-bot-server/configuration"
-	"slack-bot-server/event"
-	"slack-bot-server/logger"
 
 	"github.com/nlopes/slack"
+	"github.com/wr46/slack-bot-server/configuration"
+	"github.com/wr46/slack-bot-server/event"
+	"github.com/wr46/slack-bot-server/logger"
 )
 
 var (
@@ -15,9 +15,7 @@ var (
 	rtm *slack.RTM
 )
 
-/**
- * Connect to Slack API and instantiate Real Time Messaging
- */
+// Setup connect to Slack API and instantiate Real Time Messaging
 func Setup() {
 	api = slack.New(
 		configuration.ENV.SlackToken,
@@ -30,9 +28,7 @@ func Setup() {
 	logger.Log(logger.Debug, "Real Time Messaging instance ready!")
 }
 
-/**
- * Listen Slack Api events and handle the events
- */
+// Run Listen Slack Api events and handle the events
 func Run() {
 	go rtm.ManageConnection()
 

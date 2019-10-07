@@ -14,9 +14,7 @@ var (
 	IsDebug bool
 )
 
-/**
- * Used for standardize definition of log messages
- */
+// Setup used for standardize definition of log messages
 func Setup(debugHandle io.Writer,
 	infoHandle io.Writer,
 	warningHandle io.Writer,
@@ -29,13 +27,12 @@ func Setup(debugHandle io.Writer,
 	IsDebug = false
 }
 
+// SetDebug set Debug mode
 func SetDebug(debug bool) {
 	IsDebug = debug
 }
 
-/**
- * Only log debug messages when in Debug mode
- */
+// Log only log debug messages when in Debug mode
 func Log(logger *log.Logger, message string) {
 	if logger == Debug && !IsDebug {
 		return

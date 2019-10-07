@@ -1,8 +1,8 @@
 package main
 
 import (
-	"slack-bot-server/configuration"
-	"slack-bot-server/server"
+	"github.com/wr46/slack-bot-server/configuration"
+	"github.com/wr46/slack-bot-server/server"
 )
 
 func main() {
