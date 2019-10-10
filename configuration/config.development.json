@@ -1,5 +1,10 @@
 {
     "SlackToken" : "YOUR SLACK TOKEN HERE",
-    "BotId" : "YOUR SLACK BOT ID HERE",
-    "Debug" : false
+    "BotID": "YOUR SLACK BOT ID HERE",
+    "EmailSMTPServer": "smtp.gmail.com",
+    "EmailSMTPPort": 587,
+    "EmailUser": "YOUR EMAIL @gmail.com",
+    "EmailPassword": "YOUR EMAIL PASSWORD",
+    "VacationRecipientEmail": "EMAIL FOR VACATION REQUEST",
+    "Debug": true
 }

@@ -18,7 +18,7 @@ var (
 // Setup connect to Slack API and instantiate Real Time Messaging
 func Setup() {
 	api = slack.New(
-		configuration.ENV.SlackToken,
+		configuration.Env.SlackToken,
 		slack.OptionDebug(logger.IsDebug),
 		slack.OptionLog(log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)),
 	)

@@ -22,34 +22,28 @@ func HandleMessage(event *slack.MessageEvent, api *slack.Client) {
 	sendMessage(api, event.Channel, message)
 }
 
-/**
- * Evaluate if is related to a Bot or an User message
- */
+// Evaluate if is related to a Bot or an User message
 func isABotMessage(event *slack.MessageEvent) bool {
 	if len(event.BotID) > 0 {
-		logger.Log(logger.Debug, fmt.Sprintf("BotId = '%s'", event.BotID))
+		logger.Log(logger.Debug, fmt.Sprintf("BotID = '%s'", event.BotID))
 		return true
 	}
 	return false
 }
 
-/**
- * Evaluate if message is to the Bot
- */
+// Evaluate if message is to the Bot
 func isMessageToBot(event *slack.MessageEvent) bool {
 	// Message sent into Bot chat window or with Bot tagged
 	if isPrivateChat(event.Channel) ||
-		strings.Contains(event.Text, "<@"+configuration.ENV.BotID+">") {
+		strings.Contains(event.Text, "<@"+configuration.Env.BotID+">") {
 		return true
 	}
 
 	return false
 }
 
-/**
- * Evaluate if channel is private or public
- * Private chat in Slack has a prefix letter
- */
+// Evaluate if channel is private or public
+// Private chat in Slack has a prefix letter
 func isPrivateChat(channelID string) bool {
 	if channelID != "" && channelID[0] == privateChanelPrefix {
 		return true
