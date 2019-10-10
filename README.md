@@ -10,20 +10,20 @@ or mention the bot in workspace channels.
 
 ## Usage
 
-In order for the server to work, you need to configure the config.json file. (./geekbot/configuration/config.development.json)
+In order for the server to work, you need to configure the config.json file. (./configuration/config.development.json)
 
 ```javascript
 {
     "SlackToken" : "YOUR SLACK TOKEN HERE",
-    "BotId" : "YOUR SLACK BOT ID HERE",
+    "BotID" : "YOUR SLACK BOT ID HERE",
     "Debug" : false
 }
 ```
 
-- **SlackToken** can be found after bot integration in your Slack workspace
-- **BotId** can be found simply by execute this server in debug mode and chat directly with the bot
+- **SlackToken** can be found after bot integration in your Slack workspace website
+- **BotID** can be found simply by execute this server in debug mode and chat directly with the bot
 
-**Docker build and run
+**Docker build and run**
 Run the following command:
 
 ```bash
@@ -31,7 +31,7 @@ $ docker build -t slack-bot-server .
 
 ```
 ```bash
-docker run --name slack-bot-server -d slack-bot-server
+$ docker run --name slack-bot-server -d slack-bot-server
 ```
 
 ## Useful documentation

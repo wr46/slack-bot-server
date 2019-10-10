@@ -17,10 +17,15 @@ type Configuration struct {
 	BotID        string
 	BotChannelID string
 	Debug        bool
+	EmailSMTPServer        string
+	EmailSMTPPort          int
+	EmailUser              string
+	EmailPassword          string
+	VacationRecipientEmail string
 }
 
-// ENV environment data
-var ENV Configuration
+// Env environment data
+var Env Configuration
 
 // Setup configuration
 func Setup() {
@@ -28,14 +33,10 @@ func Setup() {
 	// Initialize logger
 	logger.Setup(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
 
-	configuration := Configuration{}
-	err := gonfig.GetConf(getFileName(), &configuration)
-
-	if err != nil {
+	if err := gonfig.GetConf(getFileName(), &Env); err != nil {
 		logger.Log(logger.Error, err.Error())
 	}
-	logger.SetDebug(configuration.Debug)
-	ENV = configuration
+	logger.SetDebug(Env.Debug)
 	logger.Log(logger.Info, "Environment is ready!")
 }
 
