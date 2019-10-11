@@ -67,7 +67,7 @@ func buildJokeMsg(category string) string {
 
 	resp, err := http.Get("https://api.jokes.one/jod?category=" + category)
 	if err != nil {
-		return errorMsg + "Oops... there was a problem in the request. Is a valid category?"
+		return errorMsg + "Oops... there was a problem in the request. Is it a valid category?"
 	}
 
 	var result map[string]interface{}
