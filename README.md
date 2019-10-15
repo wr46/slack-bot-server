@@ -16,6 +16,11 @@ In order for the server to work, you need to configure the config.json file. (./
 {
     "SlackToken" : "YOUR SLACK TOKEN HERE",
     "BotID" : "YOUR SLACK BOT ID HERE",
+    "EmailSMTPServer": "SMTP SERVER",
+    "EmailSMTPPort": "SMTP PORT",
+    "EmailUser": "YOUR SENDER EMAIL",
+    "EmailPassword": "YOUR SENDER EMAIL PASSWORD",
+    "VacationRecipientEmail": "YOUR RECIPIENT EMAIL FOR VACATION REQUEST",
     "Debug" : false
 }
 ```
@@ -23,15 +28,41 @@ In order for the server to work, you need to configure the config.json file. (./
 - **SlackToken** can be found after bot integration in your Slack workspace website
 - **BotID** can be found simply by execute this server in debug mode and chat directly with the bot
 
+**Note:** \
+The email configuration was intended to be used as a vacation request process. \
+Change it to suit your needs.
+
+## Docker
+
 **Docker build and run**
 Run the following command:
 
 ```bash
-$ docker build -t slack-bot-server . 
-
+docker build -t slack-bot-server . 
 ```
+
 ```bash
-$ docker run --name slack-bot-server -d slack-bot-server
+docker run --name slack-bot-server -d slack-bot-server
+```
+
+**Usefull commands:**
+
+- List docker containers
+
+```bash
+docker ps
+```
+
+- Stop one or more running docker containers
+
+```bash
+docker stop slack-bot-server
+```
+
+- Remove one or more docker containers
+
+```bash
+docker rm slack-bot-server
 ```
 
 ## Useful documentation
