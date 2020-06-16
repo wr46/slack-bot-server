@@ -1,6 +1,6 @@
 package command
 
-import "github.com/nlopes/slack"
+import "github.com/slack-go/slack"
 
 // Executable interface will give command abstraction
 // Run for command execution

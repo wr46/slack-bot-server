@@ -1,0 +1,17 @@
+version: '2.0'
+services:
+  botapp:
+    build: .
+    ports: 
+      - "3000:3000"
+
+  ngrok:
+    image: wernight/ngrok
+    depends_on: 
+      - botapp
+    ports: 
+      - "4040:4040"
+    environment: 
+
+      - NGROK_AUTH=1dOeOIKSo2SH41XYX6PYv9W8B5Q_67QnrEtYXUCnkfYpKqbpx
+      - NGROK_PORT=botapp:3000

@@ -3,7 +3,7 @@ package command
 import (
 	"fmt"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 )
 
 type helpCmd struct {

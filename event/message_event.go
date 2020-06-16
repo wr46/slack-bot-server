@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 	"github.com/wr46/slack-bot-server/bot"
 	"github.com/wr46/slack-bot-server/configuration"
 	"github.com/wr46/slack-bot-server/logger"

@@ -31,5 +31,7 @@ RUN go build -o main .
 # Declare volumes to mount
 VOLUME ["/slack-bot-server/logs"]
 
+EXPOSE 3000
+
 # Command to run the executable
 CMD ["./main"]
