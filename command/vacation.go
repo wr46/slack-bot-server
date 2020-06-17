@@ -157,7 +157,7 @@ func sendMessage(user *slack.User, args map[string]string) string {
 	t := time.Now()
 	subject := fmt.Sprintf(emailSubjectTemplate, username)
 	// recipients := []string{utils.ExtractEmails(message)}
-	recipients := []string{configuration.Env.VacationRecipientEmail}
+	recipients := []string{configuration.Env.Email.VacationRecipient}
 	htmlBody := fmt.Sprintf(emailHTMLBodyTemplate, username, t.Format("15:04:05 on 02/01/2006"), bodyPart)
 
 	if utils.SendEmail(utils.BuildMessage(subject, user, htmlBody, recipients)) {

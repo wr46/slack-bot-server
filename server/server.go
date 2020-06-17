@@ -3,10 +3,7 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
@@ -14,23 +11,15 @@ import (
 	"github.com/wr46/slack-bot-server/logger"
 )
 
-var (
-	api *slack.Client
-	rtm *slack.RTM
-)
+var api *slack.Client
 
-// Setup connect to Slack API and instantiate Real Time Messaging
+// Setup Slack API
 func Setup() {
-	logger.Log(logger.Debug, configuration.Env.SlackToken)
-	api = slack.New(
-		configuration.Env.SlackToken,
-		slack.OptionDebug(logger.IsDebug),
-		slack.OptionLog(log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)),
-	)
-	logger.Log(logger.Debug, "API instance ready!")
+	slackToken := configuration.Env.Slack.BotOauthToken
+	logger.Log(logger.Debug, slackToken)
+	api = slack.New(slackToken)
 
-	rtm = api.NewRTM()
-	logger.Log(logger.Debug, "Real Time Messaging instance ready!")
+	logger.Log(logger.Debug, "Slack API setup ready!")
 }
 
 // Run Listen Slack Api events and handle the events
@@ -45,10 +34,12 @@ func Run() {
 	*/
 
 	http.HandleFunc("/events-endpoint", func(w http.ResponseWriter, r *http.Request) {
+
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(r.Body)
 		body := buf.String()
-		eventsAPIEvent, e := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: "TOKEN"}))
+		logger.Log(logger.Info, body)
+		eventsAPIEvent, e := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: configuration.Env.Slack.VerificationToken}))
 		if e != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -72,6 +63,9 @@ func Run() {
 		}
 	})
 
-	fmt.Println("[INFO] Server listening")
-	http.ListenAndServe(":3000", nil)
+	logger.Log(logger.Info, "Server listening!")
+
+	if err := http.ListenAndServe(":3000", nil); err != nil {
+		logger.Log(logger.Error, err.Error())
+	}
 }

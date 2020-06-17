@@ -1,7 +1,7 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
 
 # Fixed image
-FROM golang:1.13.1-alpine3.10
+FROM golang:1.14.4-alpine3.12
 
 # Build Args
 ARG APP_NAME=slack-bot-server

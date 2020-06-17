@@ -35,7 +35,7 @@ func isABotMessage(event *slack.MessageEvent) bool {
 func isMessageToBot(event *slack.MessageEvent) bool {
 	// Message sent into Bot chat window or with Bot tagged
 	if isPrivateChat(event.Channel) ||
-		strings.Contains(event.Text, "<@"+configuration.Env.BotID+">") {
+		strings.Contains(event.Text, "<@"+configuration.Env.Slack.BotID+">") {
 		return true
 	}
 

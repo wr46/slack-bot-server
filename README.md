@@ -38,12 +38,15 @@ Change it to suit your needs.
 Run the following command:
 
 ```bash
+docker-compose up
 docker build -t slack-bot-server . 
 ```
 
 ```bash
 docker run --name slack-bot-server -d slack-bot-server
 ```
+
+http://localhost:4040/api/tunnels
 
 **Usefull commands:**
 

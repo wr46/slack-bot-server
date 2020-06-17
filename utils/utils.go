@@ -63,7 +63,7 @@ func CompareStringDates(date1 string, date2 string) (int, error) {
 // BuildMessage fill email headers with given data
 func BuildMessage(subject string, user *slack.User, htmlBody string, recipients []string) *gomail.Message {
 	message := gomail.NewMessage()
-	message.SetHeader("From", configuration.Env.EmailUser)
+	message.SetHeader("From", configuration.Env.Email.User)
 	message.SetHeader("To", recipients...)
 	message.SetAddressHeader("Cc", user.Profile.Email, user.RealName)
 	message.SetHeader("Subject", subject)
@@ -76,10 +76,10 @@ func BuildMessage(subject string, user *slack.User, htmlBody string, recipients 
 func SendEmail(message *gomail.Message) bool {
 
 	dialer := gomail.NewPlainDialer(
-		configuration.Env.EmailSMTPServer,
-		configuration.Env.EmailSMTPPort,
-		configuration.Env.EmailUser,
-		configuration.Env.EmailPassword)
+		configuration.Env.Email.SMTPServer,
+		configuration.Env.Email.SMTPPort,
+		configuration.Env.Email.User,
+		configuration.Env.Email.Password)
 
 	if err := dialer.DialAndSend(message); err != nil {
 		logger.Log(logger.Warning, fmt.Sprintf("Send email has failed! %s", err))
