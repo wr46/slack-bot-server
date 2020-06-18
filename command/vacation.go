@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 	"github.com/wr46/slack-bot-server/configuration"
 	"github.com/wr46/slack-bot-server/logger"
 	"github.com/wr46/slack-bot-server/utils"
@@ -66,6 +66,7 @@ func (cmd vacationCmd) Run(user *slack.User) string {
 	if !cmd.isValid() {
 		return cmd.cmd.errorMsg
 	}
+
 	return sendMessage(user, cmd.cmd.args)
 }
 
@@ -95,6 +96,7 @@ func applyRules(args map[string]string) string {
 	if !hasFrom || !hasTo || !hasOn || !hasDay {
 		return errorMsg + argsMissingMsg
 	}
+
 	if (valFrom != "" && valTo == "") || (valFrom == "" && valTo != "") {
 		return errorMsg + valFTMissingMsg
 	}
@@ -104,17 +106,21 @@ func applyRules(args map[string]string) string {
 		if _, err := utils.ParseDate(valFrom); err != nil {
 			return errorMsg + invalidValFromMsg
 		}
+
 		if _, err := utils.ParseDate(valTo); err != nil {
 			return errorMsg + invalidValToMsg
 		}
+
 		if isFuture, _ := utils.IsFutureStringDate(valFrom); !isFuture {
 			return errorMsg + invalidValFromTodayMsg
 		}
+
 		if result, _ := utils.CompareStringDates(valFrom, valTo); result >= 0 {
 			return errorMsg + invalidValFromToMsg
 		}
 
 		isValid = true
+
 		return ""
 	}
 
@@ -122,17 +128,21 @@ func applyRules(args map[string]string) string {
 	if valOn == "" {
 		return errorMsg + valOnMissingMsg
 	}
+
 	if _, err := utils.ParseDate(valOn); err != nil {
 		return errorMsg + invalidValOnMsg
 	}
+
 	if isFuture, _ := utils.IsFutureStringDate(valOn); !isFuture {
 		return errorMsg + invalidValOnTodayMsg
 	}
+
 	if valDay != "" && valDay != partOfDayMorning && valDay != partOfDayAfternoon {
 		return errorMsg + invalidValDayMsg
 	}
 
 	isValid = true
+
 	return ""
 }
 
@@ -146,6 +156,7 @@ func sendMessage(user *slack.User, args map[string]string) string {
 	valDay, _ := args[argDay]
 
 	bodyPart := ""
+
 	if valFrom != "" {
 		bodyPart = fmt.Sprintf(emailHTMLBodyFromToPart, username, valFrom, valTo)
 	} else if valOn != "" {
@@ -157,11 +168,12 @@ func sendMessage(user *slack.User, args map[string]string) string {
 	t := time.Now()
 	subject := fmt.Sprintf(emailSubjectTemplate, username)
 	// recipients := []string{utils.ExtractEmails(message)}
-	recipients := []string{configuration.Env.VacationRecipientEmail}
+	recipients := []string{configuration.Env.Email.VacationRecipient}
 	htmlBody := fmt.Sprintf(emailHTMLBodyTemplate, username, t.Format("15:04:05 on 02/01/2006"), bodyPart)
 
 	if utils.SendEmail(utils.BuildMessage(subject, user, htmlBody, recipients)) {
 		return successMsg + emailSent
 	}
+
 	return errorMsg + emailNotSent
 }

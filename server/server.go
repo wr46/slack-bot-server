@@ -1,39 +1,32 @@
 package server
 
 import (
-	"log"
-	"os"
+	"net/http"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 	"github.com/wr46/slack-bot-server/configuration"
 	"github.com/wr46/slack-bot-server/event"
 	"github.com/wr46/slack-bot-server/logger"
 )
 
-var (
-	api *slack.Client
-	rtm *slack.RTM
-)
+var api *slack.Client
 
-// Setup connect to Slack API and instantiate Real Time Messaging
+// Setup Slack API
 func Setup() {
-	api = slack.New(
-		configuration.Env.SlackToken,
-		slack.OptionDebug(logger.IsDebug),
-		slack.OptionLog(log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)),
-	)
-	logger.Log(logger.Debug, "API instance ready!")
+	slackToken := configuration.Env.Slack.BotOauthToken
+	logger.Log(logger.Debug, slackToken)
+	api = slack.New(slackToken)
 
-	rtm = api.NewRTM()
-	logger.Log(logger.Debug, "Real Time Messaging instance ready!")
+	logger.Log(logger.Debug, "Slack API setup ready!")
 }
 
 // Run Listen Slack Api events and handle the events
 func Run() {
-	go rtm.ManageConnection()
+	event.SetContext(api)
+	http.HandleFunc("/events-endpoint", event.HandleEvent)
+	logger.Log(logger.Info, "Server listening!")
 
-	for evt := range rtm.IncomingEvents {
-		event.HandleEvent(evt.Data, api)
+	if err := http.ListenAndServe(":3000", nil); err != nil {
+		logger.Log(logger.Error, err.Error())
 	}
-	logger.Log(logger.Info, "Server terminated!")
 }

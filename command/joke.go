@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 	"github.com/wr46/slack-bot-server/logger"
 )
 
@@ -43,7 +43,8 @@ func (cmd jokeCmd) Run(user *slack.User) string {
 		return cmd.cmd.errorMsg
 	}
 
-	response, _ := cmd.cmd.args["response"]
+	response := cmd.cmd.args["response"]
+
 	if response == jokeCategories {
 		msg := buildJokeHelpMsg()
 		return msg
@@ -71,6 +72,7 @@ func buildJokeMsg(category string) string {
 	}
 
 	var result map[string]interface{}
+
 	json.NewDecoder(resp.Body).Decode(&result)
 
 	contents, ok := result["contents"].(map[string]interface{})
@@ -86,24 +88,25 @@ func buildJokeMsg(category string) string {
 	}
 
 	joke := jokes[0].(map[string]interface{})
+
 	if !ok {
 		return errorMsg + "Oops... Bad response!"
 	}
 
-	text:= joke["joke"].(map[string]interface{})
+	text := joke["joke"].(map[string]interface{})
 
 	return text["text"].(string) + "\n :rolling_on_the_floor_laughing:"
 }
 
 // TODO: improve request parsing and validation
 func buildJokeHelpMsg() string {
-
 	resp, err := http.Get("https://api.jokes.one/jod/categories")
 	if err != nil {
 		return errorMsg + "Oops... there was a problem in the request"
 	}
 
 	var result map[string]interface{}
+
 	json.NewDecoder(resp.Body).Decode(&result)
 
 	contents, ok := result["contents"].(map[string]interface{})
@@ -119,6 +122,7 @@ func buildJokeHelpMsg() string {
 	}
 
 	var text string = "*Categories:* \n"
+
 	for _, cat := range categories {
 		m := cat.(map[string]interface{})
 		name := m["name"].(string)
@@ -145,5 +149,6 @@ func applyJokeRules(args map[string]string) string {
 	}
 
 	isValid = true
+
 	return ""
 }

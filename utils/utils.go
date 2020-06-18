@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 	"github.com/wr46/slack-bot-server/configuration"
 	"github.com/wr46/slack-bot-server/logger"
 	"gopkg.in/gomail.v2"
@@ -31,9 +31,11 @@ func IsFutureStringDate(date string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+
 	if t.After(time.Now()) {
 		return true, nil
 	}
+
 	return false, nil
 }
 
@@ -47,23 +49,27 @@ func CompareStringDates(date1 string, date2 string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+
 	t2, err := ParseDate(date2)
 	if err != nil {
 		return 0, err
 	}
+
 	if t1.Equal(t2) {
 		return 0, nil
 	}
+
 	if t1.Before(t2) {
 		return -1, nil
 	}
+
 	return 1, nil
 }
 
 // BuildMessage fill email headers with given data
 func BuildMessage(subject string, user *slack.User, htmlBody string, recipients []string) *gomail.Message {
 	message := gomail.NewMessage()
-	message.SetHeader("From", configuration.Env.EmailUser)
+	message.SetHeader("From", configuration.Env.Email.User)
 	message.SetHeader("To", recipients...)
 	message.SetAddressHeader("Cc", user.Profile.Email, user.RealName)
 	message.SetHeader("Subject", subject)
@@ -74,17 +80,17 @@ func BuildMessage(subject string, user *slack.User, htmlBody string, recipients 
 
 // SendEmail send email with given message by configuration properties
 func SendEmail(message *gomail.Message) bool {
-
 	dialer := gomail.NewPlainDialer(
-		configuration.Env.EmailSMTPServer,
-		configuration.Env.EmailSMTPPort,
-		configuration.Env.EmailUser,
-		configuration.Env.EmailPassword)
+		configuration.Env.Email.SMTPServer,
+		configuration.Env.Email.SMTPPort,
+		configuration.Env.Email.User,
+		configuration.Env.Email.Password)
 
 	if err := dialer.DialAndSend(message); err != nil {
 		logger.Log(logger.Warning, fmt.Sprintf("Send email has failed! %s", err))
 		return false
 	}
+
 	return true
 }
 
@@ -93,5 +99,6 @@ func ExtractEmails(text string) string {
 	re := regexp.MustCompile(`mailto:(.*)\|`)
 	email := re.FindStringSubmatch(text)[1]
 	logger.Log(logger.Debug, fmt.Sprintf("Extracted email: %s", email))
+
 	return email
 }

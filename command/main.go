@@ -10,8 +10,10 @@ func GetCommand(text string) Executable {
 	for _, cmd := range commandsDoc {
 		regx := regexp.MustCompile(cmd.regexValidation)
 		match := regx.FindStringSubmatch(text)
+
 		if len(match) > 0 {
 			args := make(map[string]string)
+
 			for i, label := range regx.SubexpNames() {
 				if i > 0 && i <= len(match) {
 					args[label] = match[i]
@@ -21,6 +23,7 @@ func GetCommand(text string) Executable {
 			return cmd.instance.buildCommand(args)
 		}
 	}
+
 	return nil
 }
 

@@ -3,7 +3,7 @@ package command
 import (
 	"fmt"
 
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 )
 
 type helpCmd struct {
@@ -46,5 +46,6 @@ func buildHelpMsg() string {
 		message += fmt.Sprintf(msgCommandFormat, command.name, command.description, command.syntax)
 		message += msgSeparatorFormat
 	}
+
 	return message
 }
