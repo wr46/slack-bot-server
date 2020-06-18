@@ -13,7 +13,6 @@ const (
 	DebugLbl                  = "DEBUG"
 	BotOauthTokenLbl          = "BOT_USER_OAUTH_ACCESS_TOKEN"
 	VerificationTokenLbl      = "VERIFICATION_TOKEN"
-	BotIDLbl                  = "BOT_ID"
 	EmailSMTPServerLbl        = "EMAIL_SMTP_SERVER"
 	EmailSMTPPortLbl          = "EMAIL_SMTP_PORT"
 	EmailUserLbl              = "EMAIL_USER"
@@ -75,7 +74,6 @@ func setupApplication() {
 func setupSlack() {
 	Env.Slack.BotOauthToken = os.Getenv(BotOauthTokenLbl)
 	Env.Slack.VerificationToken = os.Getenv(VerificationTokenLbl)
-	Env.Slack.BotID = os.Getenv(BotIDLbl)
 }
 
 func setupEmail() {
