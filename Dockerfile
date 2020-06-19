@@ -25,6 +25,9 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
+# Allow to execute the script when App running
+RUN ["chmod", "+x", "./scripts/script.sh"]
+
 # Build the Go app
 RUN go build -o main .
 

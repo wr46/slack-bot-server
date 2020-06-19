@@ -6,6 +6,7 @@ var commandsDoc = [...]commandDoc{
 	helpDoc,
 	vacationDoc,
 	jokeDoc,
+	scriptDoc,
 }
 
 // Add here all common hardcoded strings
