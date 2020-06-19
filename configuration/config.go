@@ -1,7 +1,6 @@
 package configuration
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -55,12 +54,10 @@ func Setup() {
 	setupEmail()
 
 	logger.SetDebug(Env.Debug)
-	logger.Log(logger.Info, "Environment is ready!")
+	logger.Log(logger.Debug, "Environment is ready!")
 }
 
 func setupApplication() {
-	fmt.Println("Hello " + os.Getenv("DEBUG"))
-
 	isDebug, err := strconv.ParseBool(os.Getenv(DebugLbl))
 	if err != nil {
 		logger.Log(logger.Error, err.Error())
@@ -68,7 +65,7 @@ func setupApplication() {
 
 	Env.Debug = isDebug
 
-	logger.Log(logger.Info, "Debug mode: "+strconv.FormatBool(Env.Debug))
+	logger.Log(logger.Debug, "Debug mode: "+strconv.FormatBool(Env.Debug))
 }
 
 func setupSlack() {
