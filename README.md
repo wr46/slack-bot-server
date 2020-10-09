@@ -95,6 +95,7 @@ Thanks to everyone contributing in any manner for this repo and we extend this t
 <table>
   <tr>
     <td align="center"><a href="https://pt.linkedin.com/in/wilsonmarodrigues"><img src="https://avatars0.githubusercontent.com/u/5550776?v=4" width="100px;" alt=""/><br /><sub><b>Wilson Rodrigues</b></sub></a><br /><a href="https://github.com/wr46/slack-bot-server/commits?author=wr46" title="Code">💻</a> <a href="#maintenance-wr46" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="http://people.virginia.edu/~ys4ea"><img src="https://avatars0.githubusercontent.com/u/6952923?v=4" width="100px;" alt=""/><br /><sub><b>Yosyp Schwab</b></sub></a><br /><a href="https://github.com/wr46/slack-bot-server/commits?author=yosyp" title="Documentation">📖</a></td>
   </tr>
 </table>
 
