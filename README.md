@@ -1,4 +1,7 @@
 # slack-bot-server
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 A simple slack bot server template in Go for messaging
 
@@ -86,3 +89,15 @@ Thanks to everyone contributing in any manner for this repo and we extend this t
 **Sharing is Caring**
 
 ## Contributors ✨
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://pt.linkedin.com/in/wilsonmarodrigues"><img src="https://avatars0.githubusercontent.com/u/5550776?v=4" width="100px;" alt=""/><br /><sub><b>Wilson Rodrigues</b></sub></a><br /><a href="https://github.com/wr46/slack-bot-server/commits?author=wr46" title="Code">💻</a> <a href="#maintenance-wr46" title="Maintenance">🚧</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
