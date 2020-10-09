@@ -1,17 +1,6 @@
-# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+FROM golang:1.15-alpine3.12 AS build
 
-# Fixed image
-FROM golang:1.14.4-alpine3.12
-
-# Build Args
-ARG APP_NAME=slack-bot-server
-ARG LOG_DIR=/${APP_NAME}/logs
-
-# Create Log Directory
-RUN mkdir -p ${LOG_DIR}
-
-# Environment Variables
-ENV LOG_FILE_LOCATION=${LOG_DIR}/app.log 
+ENV CGO_ENABLED=0
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -31,8 +20,19 @@ RUN ["chmod", "+x", "./scripts/script.sh"]
 # Build the Go app
 RUN go build -o main .
 
-# Declare volumes to mount
-VOLUME ["/slack-bot-server/logs"]
+# Linter execution
+FROM golangci/golangci-lint:v1.31-alpine AS linter
+
+FROM build AS lint
+
+COPY --from=linter /usr/bin/golangci-lint /usr/bin/golangci-lint
+
+RUN golangci-lint run .
+
+# Application binary execution
+FROM build AS bin
+
+COPY --from=build /app /app
 
 EXPOSE 3000
 
