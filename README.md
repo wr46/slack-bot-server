@@ -67,6 +67,22 @@ http://localhost:4040/api/tunnels
 - [dep](https://github.com/golang/dep) (dependency manager)
 - [Slack API in Go](https://github.com/slack-go/slack)
 
+## ❗ Code of Conduct
+
+We expect everyone to abide by our [**Code of Conduct**](./CODE_OF_CONDUCT.md). Please read it. 🤝
+
+## 🙌🏻 How to Contribute
+
+Check out our [**Contributing Guide**](./CONTRIBUTING.md) for information on contributing.
+
 ## License
 
-slack-bot-server is licensed by an MIT license as can be found in the [LICENSE](https://github.com/wr46/slack-bot-server/blob/master/LICENSE) file.
+slack-bot-server is licensed by an MIT license as can be found in the [LICENSE](./LICENSE) file.
+
+## 💜 Thanks
+
+Thanks to everyone contributing in any manner for this repo and we extend this thanks to everyone working on Open Source.
+
+**Sharing is Caring**
+
+## Contributors ✨
