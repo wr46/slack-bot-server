@@ -4,18 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/slack-go/slack"
 	"github.com/wr46/slack-bot-server/logger"
 )
 
-// Arguments constants
+// Errors
+const badResponse = "Oops... Bad response!"
+
+// Arguments constants.
 const jokeResponse = "response"
 const jokeCategories = "categories"
 
-// Command documentation constants
+// Command documentation constants.
 const jokeSyntax = "`joke { " + jokeCategories + " | <category> }`"
 const jokeRegexpStr = "joke\\s+(?P<" + jokeResponse + ">[a-z]+)\\s*$"
+
+// Jokes API.
+const jokeAPIBaseURLStr = "https://api.jokes.one/jod"
 
 type jokeCmd struct {
 	cmd command
@@ -43,18 +50,25 @@ func (cmd jokeCmd) Run(user *slack.User) string {
 		return cmd.cmd.errorMsg
 	}
 
-	response := cmd.cmd.args["response"]
+	response := cmd.cmd.args[jokeResponse]
+	baseURL, err := url.Parse(jokeAPIBaseURLStr)
+
+	if err != nil {
+		return errorMsg + "Malformed URL!"
+	}
 
 	if response == jokeCategories {
-		msg := buildJokeHelpMsg()
+		msg := buildJokeHelpMsg(baseURL)
+
 		return msg
 	}
 
-	return buildJokeMsg(response)
+	return buildJokeMsg(baseURL, response)
 }
 
 func (cmd jokeCmd) buildCommand(args map[string]string) Executable {
 	logger.Log(logger.Debug, fmt.Sprintf("Command joke arguments: %s", args))
+
 	return jokeCmd{cmd: command{args: args, doc: jokeDoc, errorMsg: applyJokeRules(args)}}
 }
 
@@ -63,34 +77,40 @@ func (cmd jokeCmd) isValid() bool {
 }
 
 // Gives a message with all commands and options by template
-// TODO: improve request parsing and validation
-func buildJokeMsg(category string) string {
+func buildJokeMsg(baseURL *url.URL, category string) string {
+	params := url.Values{}
+	params.Add("category", category)
+	baseURL.RawQuery = params.Encode()
 
-	resp, err := http.Get("https://api.jokes.one/jod?category=" + category)
+	resp, err := http.Get(baseURL.String())
 	if err != nil {
 		return errorMsg + "Oops... there was a problem in the request. Is it a valid category?"
 	}
 
 	var result map[string]interface{}
 
-	json.NewDecoder(resp.Body).Decode(&result)
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return errorMsg + "Oops... there was a problem in parsing response"
+	}
+	defer resp.Body.Close()
 
 	contents, ok := result["contents"].(map[string]interface{})
 
 	if !ok {
-		return errorMsg + "Oops... Bad response!"
+		return errorMsg + badResponse
 	}
 
 	jokes, ok := contents["jokes"].([]interface{})
 
 	if !ok {
-		return errorMsg + "Oops... Bad response!"
+		return errorMsg + badResponse
 	}
 
 	joke := jokes[0].(map[string]interface{})
 
 	if !ok {
-		return errorMsg + "Oops... Bad response!"
+		return errorMsg + badResponse
 	}
 
 	text := joke["joke"].(map[string]interface{})
@@ -98,27 +118,30 @@ func buildJokeMsg(category string) string {
 	return text["text"].(string) + "\n :rolling_on_the_floor_laughing:"
 }
 
-// TODO: improve request parsing and validation
-func buildJokeHelpMsg() string {
-	resp, err := http.Get("https://api.jokes.one/jod/categories")
+func buildJokeHelpMsg(baseURL *url.URL) string {
+	resp, err := http.Get(baseURL.String() + "/" + jokeCategories)
 	if err != nil {
 		return errorMsg + "Oops... there was a problem in the request"
 	}
 
 	var result map[string]interface{}
 
-	json.NewDecoder(resp.Body).Decode(&result)
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return errorMsg + "Oops... there was a problem in parsing response"
+	}
+	defer resp.Body.Close()
 
 	contents, ok := result["contents"].(map[string]interface{})
 
 	if !ok {
-		return errorMsg + "Oops... Bad response, missing 'contents'!"
+		return errorMsg + badResponse + "Missing 'contents'!"
 	}
 
 	categories, ok := contents["categories"].([]interface{})
 
 	if !ok {
-		return errorMsg + "Oops... Bad response, missing 'categories'!"
+		return errorMsg + badResponse + "Missing 'categories'!"
 	}
 
 	var text string = "*Categories:* \n"
@@ -142,7 +165,7 @@ func applyJokeRules(args map[string]string) string {
 		return errorMsg + noArgsMsg
 	}
 
-	response, hasStr := args["response"]
+	response, hasStr := args[jokeResponse]
 
 	if !hasStr || response == "" {
 		return errorMsg + "There is some problem in regex!"

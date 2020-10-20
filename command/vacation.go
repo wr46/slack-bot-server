@@ -72,6 +72,7 @@ func (cmd vacationCmd) Run(user *slack.User) string {
 
 func (cmd vacationCmd) buildCommand(args map[string]string) Executable {
 	logger.Log(logger.Debug, fmt.Sprintf("Command vacation arguments: %s", args))
+
 	return vacationCmd{cmd: command{args: args, doc: vacationDoc, errorMsg: applyRules(args)}}
 }
 

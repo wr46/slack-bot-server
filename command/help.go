@@ -15,7 +15,7 @@ type helpCmd struct {
 // Syntax - The command as it must be typed
 // Description - A small description of the command objective
 // RegexValidation - Regex used to capture the command string and arguments
-// Instance - The instance will call itself to use is interface method
+// Instance - The instance will call itself to use is interface method.
 var helpDoc = commandDoc{
 	name:            "_help_",
 	syntax:          "`help`",
@@ -24,7 +24,7 @@ var helpDoc = commandDoc{
 	instance:        helpCmd{},
 }
 
-// Template for commands presentation
+// Template for commands presentation.
 const msgHeaderFormat = "*Commands list:* \n"
 
 func (cmd helpCmd) Run(user *slack.User) string {
@@ -39,7 +39,7 @@ func (cmd helpCmd) isValid() bool {
 	return true
 }
 
-// Gives a message with all commands and options by template
+// Gives a message with all commands and options by template.
 func buildHelpMsg() string {
 	message := msgHeaderFormat + msgSeparatorFormat
 	for _, command := range commandsDoc {

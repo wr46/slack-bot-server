@@ -50,6 +50,7 @@ func (cmd scriptCmd) Run(user *slack.User) string {
 
 func (cmd scriptCmd) buildCommand(args map[string]string) Executable {
 	logger.Log(logger.Debug, fmt.Sprintf("Command script arguments: %s", args))
+
 	return scriptCmd{cmd: command{args: args, doc: scriptDoc, errorMsg: applyScriptRules(args)}}
 }
 
@@ -82,6 +83,7 @@ func executeScript(sType string, user string) string {
 
 	if err != nil {
 		logger.Log(logger.Error, err.Error())
+
 		return errorMsg + failedToRunScriptMsg
 	}
 
