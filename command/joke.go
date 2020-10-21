@@ -7,11 +7,15 @@ import (
 	"net/url"
 
 	"github.com/slack-go/slack"
+	"github.com/wr46/slack-bot-server/configuration"
 	"github.com/wr46/slack-bot-server/logger"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // Errors
 const badResponse = "Oops... Bad response!"
+const badResponsePT = "Oops... Mau resultado!"
 
 // Arguments constants.
 const jokeResponse = "response"
@@ -44,6 +48,10 @@ var jokeDoc = commandDoc{
 
 // Template for commands presentation
 const msgHeadFormat = "*Commands list:* \n"
+
+func init() {
+	message.SetString(language.Portuguese, badResponse, badResponsePT)
+}
 
 func (cmd jokeCmd) Run(user *slack.User) string {
 	if !cmd.isValid() {
@@ -78,6 +86,7 @@ func (cmd jokeCmd) isValid() bool {
 
 // Gives a message with all commands and options by template
 func buildJokeMsg(baseURL *url.URL, category string) string {
+	i18nPrinter := configuration.Env.I18nPrinter
 	params := url.Values{}
 	params.Add("category", category)
 	baseURL.RawQuery = params.Encode()
@@ -98,19 +107,19 @@ func buildJokeMsg(baseURL *url.URL, category string) string {
 	contents, ok := result["contents"].(map[string]interface{})
 
 	if !ok {
-		return errorMsg + badResponse
+		return errorMsg + i18nPrinter.Sprintf(badResponse)
 	}
 
 	jokes, ok := contents["jokes"].([]interface{})
 
 	if !ok {
-		return errorMsg + badResponse
+		return errorMsg + i18nPrinter.Sprintf(badResponse)
 	}
 
 	joke := jokes[0].(map[string]interface{})
 
 	if !ok {
-		return errorMsg + badResponse
+		return errorMsg + i18nPrinter.Sprintf(badResponse)
 	}
 
 	text := joke["joke"].(map[string]interface{})

@@ -5,11 +5,14 @@ import (
 	"strconv"
 
 	"github.com/wr46/slack-bot-server/logger"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // Dotenv file variables labels
 const (
 	DebugLbl                  = "DEBUG"
+	I18nTagLbl                = "I18N_TAG"
 	BotOauthTokenLbl          = "BOT_USER_OAUTH_ACCESS_TOKEN"
 	VerificationTokenLbl      = "VERIFICATION_TOKEN"
 	EmailSMTPServerLbl        = "EMAIL_SMTP_SERVER"
@@ -34,27 +37,40 @@ type EmailEnv struct {
 	VacationRecipient string
 }
 
-// Configuration container
+// Configuration container.
 type Configuration struct {
-	Debug bool
-	Slack SlackEnv
-	Email EmailEnv
+	Debug       bool
+	I18nPrinter *message.Printer
+	Slack       SlackEnv
+	Email       EmailEnv
 }
 
-// Env environment data
+// Env environment data.
 var Env Configuration
 
-// Setup configuration
+// Setup configuration.
 func Setup() {
 	// Initialize logger
 	logger.Setup(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
 
+	setupLanguage()
 	setupApplication()
 	setupSlack()
 	setupEmail()
 
 	logger.SetDebug(Env.Debug)
 	logger.Log(logger.Debug, "Environment is ready!")
+}
+
+func setupLanguage() {
+	tag := language.Make(os.Getenv(I18nTagLbl))
+	if tag == language.Und {
+		tag = language.English
+
+		logger.Log(logger.Warning, "Unknown language! Default English used!")
+	}
+
+	Env.I18nPrinter = message.NewPrinter(tag)
 }
 
 func setupApplication() {
