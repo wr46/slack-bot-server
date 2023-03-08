@@ -1,40 +1,25 @@
-FROM golang:1.15-alpine3.12 AS build
+FROM golang:1.19-bullseye as builder
 
+RUN apt-get install ca-certificates && update-ca-certificates
+
+ENV GO111MODULE=on
 ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
-
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download all dependencies.
-RUN go mod download
-
-# Copy the source from the current directory to the Working Directory inside the container
+WORKDIR /src
 COPY . .
 
-# Allow to execute the script when App running
-RUN ["chmod", "+x", "./scripts/script.sh"]
+RUN go build -a -ldflags "-s -w" -o main ./cmd
 
-# Build the Go app
-RUN go build -o main .
+FROM debian:bookworm-slim
 
-# Linter execution
-FROM golangci/golangci-lint:v1.31-alpine AS linter
+RUN groupadd -r app && useradd --no-log-init -r -g app app
 
-FROM build AS lint
+WORKDIR /app
+COPY --from=builder --chown=app /src/main /app/
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-COPY --from=linter /usr/bin/golangci-lint /usr/bin/golangci-lint
+USER app
 
-RUN golangci-lint run .
-
-# Application binary execution
-FROM build AS bin
-
-COPY --from=build /app /app
-
-EXPOSE 3000
-
-# Command to run the executable
 CMD ["./main"]

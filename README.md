@@ -12,6 +12,7 @@ The main goal here was to implement a Bot that answer to users in same workspace
 or mention the bot in workspace channels.
 
 ## Implemented features
+
 - **Show all available commands**
 - **Do a vacation request**
 - **Tell a joke**
@@ -43,9 +44,11 @@ VACATION_RECIPIENT_EMAIL=EMAIL FOR VACATION REQUEST
 ```
 
 - **Ngrok Token** you must create a Ngrok account so you can have a private url and add it to Slack "Event Subscriptions" request URL. \
+
 ```bash
     ex: "https://NGROK_PUBLIC_URL_HERE/events-endpoint" (check Ngrok section below)
 ```
+
 - **Bot User OAuth Token** can be found after you create an app on Slack workspace
 - **Verification Token** can be found on "Basic Information" -> "App Credentials" of your Slack App
 
@@ -55,12 +58,15 @@ The email configuration was intended to be used as a vacation request process. C
 ## Docker
 
 **Docker build and run** 
+
 ```bash
 docker-compose up
 ```
 
 ## Ngrok
+
 Get the Ngrok public URL using the following URL
+
 ```bash
 http://localhost:4040/api/tunnels
 ```
